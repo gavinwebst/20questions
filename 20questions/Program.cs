@@ -57,6 +57,7 @@ namespace _20questions
             }
         }
 
+        //This function is how the user will naviagte through the tree 
         public void query()
         {
             if (!isQuestion())
@@ -78,6 +79,8 @@ namespace _20questions
                 this.onQueryObject();
             }
         }
+
+        //this function is used when you have reached the end of the tree 
         public void onQueryObject()
         {
           Console.WriteLine("Are you thinking of a(n) " + this.question + "?");
@@ -117,6 +120,8 @@ namespace _20questions
             this.setQuestion(userQuestion);
         }
 
+
+        //this get the user input for questions they have been asked 
         private char getYesOrNo()
         {
             char inputCharacter = ' ';

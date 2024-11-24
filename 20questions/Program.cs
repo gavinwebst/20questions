@@ -60,7 +60,7 @@ namespace _20questions
         //This function is how the user will naviagte through the tree 
         public void query()
         {
-            if (!isQuestion())
+            if (this.isQuestion())
             {
                 Console.WriteLine(this.question);
                 Console.Write("Enter 'y' for yes and 'n' for no: ");

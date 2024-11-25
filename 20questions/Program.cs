@@ -8,14 +8,16 @@ using System.IO;
 
 namespace _20questions
 {
-
+    // This class contains the three variables question yesNode and noNode
     public class TreeNode
-    {
+    {   // holds user's question
         public string question;
+        //reference to nod if user enters no
         public TreeNode yesNode;
+        //reference to nod if user enters no
         public TreeNode noNode;
 
-        //constructor for node 
+        //constructor for node which allows variables within the class to changed by creating a public method that changes them 
         public TreeNode(string question)
         {
             this.question = question;
@@ -54,7 +56,7 @@ namespace _20questions
             return this.question;
         }
 
-        //check if there are children nodes for parent node
+        //check if there are children nodes for parent node and will be later used when progressing through binary trees.
         public bool isQuestion()
         {
             if (noNode == null && yesNode == null)
@@ -68,6 +70,8 @@ namespace _20questions
         }
 
         //This function is how the user will naviagte through the tree 
+        //The game requres a user to answer a question if yes it ask the next question contain in yesNode
+        //If no the tree will take the noNode and call the update tree method and bulid upon the tree
         public void query()
         {
             if (this.isQuestion())
@@ -91,6 +95,7 @@ namespace _20questions
         }
 
         //this function is used when you have reached the end of the tree 
+        // this function is about progressing through the tree and reconstructs the tree when the computer does not know the answer.
         public void onQueryObject()
         {
             Console.WriteLine("Are you thinking of a(n) " + this.question + "?");
@@ -145,6 +150,7 @@ namespace _20questions
         }
     }
 
+    // this class is the binary tree when a new game is created a refgence noode is need whihc holds the first question of the game
     class BTTree
     {
         TreeNode rootNode;
@@ -198,6 +204,7 @@ namespace _20questions
             Console.WriteLine("Knowledge saved. Thank you for playing!");
         }
 
+        // this method will all the user to play again and returns truel if the user wants to else no
         static bool playAgain()
         {
             Console.Write("\nPlay again? (y/n): ");

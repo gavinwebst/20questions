@@ -133,11 +133,28 @@ namespace _20questions
             return inputCharacter;
         }
 
-        
+
+    }
+
+    class BTTree
+    {
+        TreeNode rootNode;
+        public BTTree(string question, string yesGuess, string noGuess)
+        {
+            rootNode = new TreeNode(question);
+            rootNode.setYesNode(new TreeNode(yesGuess));
+            rootNode.setNoNode(new TreeNode(noGuess));
+        } 
+
+        public void query()
+        {
+            rootNode.query();
+        }
     }
 
     internal class Program
     {
+        static BTTree tree;
         static void Main(string[] args)
         {
             startNewGame();

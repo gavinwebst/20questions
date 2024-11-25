@@ -2,19 +2,22 @@
 using System.ComponentModel.Design;
 using System.Security.Cryptography.X509Certificates;
 using System.Xml.Linq;
-
+using System;
+using System.IO;
 
 
 namespace _20questions
 {
 
-    public class TreeNode {
+    public class TreeNode
+    {
         public string question;
         public TreeNode yesNode;
         public TreeNode noNode;
 
         //constructor for node 
-        public TreeNode(string question) {
+        public TreeNode(string question)
+        {
             this.question = question;
             this.noNode = null;
             this.yesNode = null;
@@ -22,19 +25,23 @@ namespace _20questions
 
 
         //mutator for the nodes
-        public void setNoNode(TreeNode node) { 
+        public void setNoNode(TreeNode node)
+        {
             this.noNode = node;
         }
 
-        public void setYesNode(TreeNode node) {
-            this.yesNode = node; 
+        public void setYesNode(TreeNode node)
+        {
+            this.yesNode = node;
         }
 
-        public TreeNode getYesNode() { 
+        public TreeNode getYesNode()
+        {
             return this.yesNode;
         }
 
-        public TreeNode getNoNode() {
+        public TreeNode getNoNode()
+        {
             return this.noNode;
         }
 
@@ -42,17 +49,20 @@ namespace _20questions
         {
             this.question = question;
         }
-        public string getQuestion() { 
-            return this.question; 
+        public string getQuestion()
+        {
+            return this.question;
         }
 
         //check if there are children nodes for parent node
-        public bool isQuestion() {
+        public bool isQuestion()
+        {
             if (noNode == null && yesNode == null)
             {
                 return false;
             }
-            else {
+            else
+            {
                 return true;
             }
         }
@@ -83,21 +93,22 @@ namespace _20questions
         //this function is used when you have reached the end of the tree 
         public void onQueryObject()
         {
-          Console.WriteLine("Are you thinking of a(n) " + this.question + "?");
-          Console.Write("Enter 'y' for yes and 'n' for no: ");
-          char input = getYesOrNo(); //y or n
-          if (input == 'y')
-          {
-            Console.Write("The Computer Wins\n");
-          }
-          else
-          {
-            updateTree();
-          }
+            Console.WriteLine("Are you thinking of a(n) " + this.question + "?");
+            Console.Write("Enter 'y' for yes and 'n' for no: ");
+            char input = getYesOrNo(); //y or n
+            if (input == 'y')
+            {
+                Console.Write("The Computer Wins\n");
+            }
+            else
+            {
+                updateTree();
+            }
         }
 
         //if the user wins the program will ask them what they were think of and ask to 
-        private void updateTree() {
+        private void updateTree()
+        {
             Console.Write("You win! What were you thinking of?");
             string userInput = Console.ReadLine();
             Console.Write("Please enter a question to distinguish a(n) "
@@ -114,7 +125,7 @@ namespace _20questions
             else
             {
                 this.yesNode = new TreeNode(this.question);
-                this.noNode = new TreeNode(userInput); 
+                this.noNode = new TreeNode(userInput);
             }
             Console.Write("Thank you my knowledge has been increased");
             this.setQuestion(userQuestion);
@@ -144,7 +155,7 @@ namespace _20questions
             rootNode = new TreeNode(question);
             rootNode.setYesNode(new TreeNode(yesGuess));
             rootNode.setNoNode(new TreeNode(noGuess));
-        } 
+        }
 
         public void query()
         {
@@ -152,35 +163,22 @@ namespace _20questions
         }
     }
 
-    internal class Program
+
+    /*internal class Program
     {
         static BTTree tree;
+        
         static void Main(string[] args)
         {
-            String savaData = "tree.txt";
-
-            using (StreamReader sr = File.OpenText(savaData))
-            {
-                startNewGame();
-                Console.WriteLine("\nStarting the Game");
-                tree.query(); //play one game
-                while (playAgain())
-                {
-                    Console.WriteLine();
-                    tree.query(); //play one game
-                }
-
-            }
-            File.WriteAllText(savaData, savaData.ToString());
-
-            /*startNewGame();
+           
+            startNewGame();
             Console.WriteLine("\nStarting the Game");
             tree.query(); //play one game
             while (playAgain())
             {
                 Console.WriteLine();
                 tree.query(); //play one game
-            }*/
+            }
         }
         static bool playAgain()
         {
@@ -209,6 +207,114 @@ namespace _20questions
             Console.Write("Enter a guess if the response is No: ");
             string noGuess = Console.ReadLine();
             tree = new BTTree(question, yesGuess, noGuess);
+        }
+    }*/
+
+    internal class Program
+    {
+        static BTTree tree;
+
+        static void Main(string[] args)
+        {
+            string username = "treePlayer";
+            string userUnique = username + ".txt";
+
+            // Attempt to load existing knowledge
+            if (File.Exists(userUnique))
+            {
+                Console.WriteLine("Loading existing knowledge...");
+                tree = LoadTree(userUnique);
+            }
+            else
+            {
+                Console.WriteLine("No previous knowledge found!");
+                startNewGame();
+            }
+
+            Console.WriteLine("\nStarting the Game");
+            do
+            {
+                tree.query();
+            } while (playAgain());
+
+            // Save the updated tree
+            SaveTree(tree, userUnique);
+            Console.WriteLine("Knowledge saved. Thank you for playing!");
+        }
+
+        static bool playAgain()
+        {
+            Console.Write("\nPlay Another Game? (y/n): ");
+            char inputCharacter = ' ';
+            while (true)
+            {
+                string input = Console.ReadLine();
+                if (!string.IsNullOrEmpty(input))
+                {
+                    inputCharacter = char.ToLower(input[0]);
+                    if (inputCharacter == 'y' || inputCharacter == 'n')
+                        return inputCharacter == 'y';
+                }
+                Console.WriteLine("Invalid input. Please enter 'y' or 'n': ");
+            }
+        }
+
+        static void startNewGame()
+        {
+            Console.WriteLine("Initializing a new game.\n");
+            Console.WriteLine("Enter a question about an object: ");
+            string question = Console.ReadLine();
+            Console.Write("Enter a guess if the response is Yes: ");
+            string yesGuess = Console.ReadLine();
+            Console.Write("Enter a guess if the response is No: ");
+            string noGuess = Console.ReadLine();
+            tree = new BTTree(question, yesGuess, noGuess);
+        }
+
+        static void SaveTree(BTTree tree, string filePath)
+        {
+            using (StreamWriter writer = new StreamWriter(filePath))
+            {
+                SaveNode(tree.rootNode, writer);
+            }
+        }
+
+        static void SaveNode(TreeNode node, StreamWriter writer)
+        {
+            if (node == null) return;
+
+            // Write the current node's question
+            writer.WriteLine(node.question);
+            // Write indicators for child nodes
+            writer.WriteLine(node.yesNode != null ? "Y" : "N");
+            writer.WriteLine(node.noNode != null ? "Y" : "N");
+
+            // Recursively save child nodes
+            SaveNode(node.yesNode, writer);
+            SaveNode(node.noNode, writer);
+        }
+
+        static BTTree LoadTree(string filePath)
+        {
+            using (StreamReader reader = new StreamReader(filePath))
+            {
+                TreeNode root = LoadNode(reader);
+                return new BTTree(root);
+            }
+        }
+
+        static TreeNode LoadNode(StreamReader reader)
+        {
+            // Read the current node's question
+            string question = reader.ReadLine();
+            string hasYes = reader.ReadLine();
+            string hasNo = reader.ReadLine();
+
+            TreeNode node = new TreeNode(question);
+            if (hasYes == "Y") node.yesNode = LoadNode(reader);
+            if (hasNo == "Y") node.noNode = LoadNode(reader);
+
+            return node;
         }
     }
 }

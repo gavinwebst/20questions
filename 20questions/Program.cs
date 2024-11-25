@@ -157,14 +157,30 @@ namespace _20questions
         static BTTree tree;
         static void Main(string[] args)
         {
-            startNewGame();
+            String savaData = "tree.txt";
+
+            using (StreamReader sr = File.OpenText(savaData))
+            {
+                startNewGame();
+                Console.WriteLine("\nStarting the Game");
+                tree.query(); //play one game
+                while (playAgain())
+                {
+                    Console.WriteLine();
+                    tree.query(); //play one game
+                }
+
+            }
+            File.WriteAllText(savaData, savaData.ToString());
+
+            /*startNewGame();
             Console.WriteLine("\nStarting the Game");
             tree.query(); //play one game
             while (playAgain())
             {
                 Console.WriteLine();
                 tree.query(); //play one game
-            }
+            }*/
         }
         static bool playAgain()
         {

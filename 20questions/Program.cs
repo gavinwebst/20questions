@@ -159,11 +159,16 @@ namespace _20questions
         {
             rootNode.query();
         }
+
+        public TreeNode getRootNode() {
+            return rootNode;
+        }
     }
 
     internal class Program
     {
-        static BTTree tree;
+        /* we tried it a mess good luck have fun ;)*/
+      
 
         static void Main(string[] args)
         {

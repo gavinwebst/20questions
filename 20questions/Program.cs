@@ -167,8 +167,8 @@ namespace _20questions
 
     internal class Program
     {
-        /* we tried it a mess good luck have fun ;)*/
-      
+        /* we tried it a mess good luck have fun ;) */
+        public static BTTree tree; 
 
         static void Main(string[] args)
         {
